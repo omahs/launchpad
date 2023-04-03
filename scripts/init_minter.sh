@@ -1,28 +1,3 @@
-# {
-# 	"unit_price": {
-# 		"amount": 50000000,
-# 		"denom": "ustars"
-# 	},
-# 	"num_tokens": 100,
-# 	"start_time": 1680555267000000000,
-# 	"per_address_limit": 5,
-# 	"base_token_uri": "ipfs://QmYxw1rURvnbQbBRTfmVaZtxSrkrfsbodNzibgBrVrUrtN",
-# 	"sg721_code_id": 1972,
-# 	"sg721_instantiate_msg": {
-# 		"name": "TEST",
-# 		"symbol": "TEST",
-# 		"minter": "stars1cfudsnwnfezvqjnlhtxhssvzneykysc89ad3nm",
-# 		"collection_info": {
-# 			"creator": "stars1cfudsnwnfezvqjnlhtxhssvzneykysc89ad3nm",
-# 			"description": "Stargaze Monkeys",
-# 			"image": "https://example.com/image.png",
-# 			"royalty_info": {
-# 				"payment_address": "stars1cfudsnwnfezvqjnlhtxhssvzneykysc89ad3nm",
-# 				"share": "1000"
-# 			}
-# 		}
-# 	}
-# }
 MSG=$(cat <<EOF
 {
 	"unit_price": {
