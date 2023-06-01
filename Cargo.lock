@@ -3277,6 +3277,23 @@ dependencies = [
 ]
 
 [[package]]
+name = "sg-twitter-verified-name"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 0.16.0",
+ "cw-utils 0.16.0",
+ "cw2 0.16.0",
+ "rust_decimal",
+ "schemars",
+ "serde",
+ "sg-std 2.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "sg1",
+ "thiserror",
+]
+
+[[package]]
 name = "sg-utils"
 version = "2.3.0"
 dependencies = [
