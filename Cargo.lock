@@ -3255,6 +3255,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "sg-smart-whitelist"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "serde",
+]
+
+[[package]]
 name = "sg-splits"
 version = "2.3.0"
 dependencies = [

@@ -1,0 +1,13 @@
+[package]
+name        = "sg-smart-whitelist"
+authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
+description = "Definition and types for Stargaze Smart Whitelists"
+version     = { workspace = true }
+edition     = { workspace = true }
+homepage    = { workspace = true }
+repository  = { workspace = true }
+license     = { workspace = true }
+
+[dependencies]
+cosmwasm-schema = { workspace = true }
+serde           = { workspace = true }
