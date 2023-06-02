@@ -29,12 +29,12 @@ library = []
 cosmwasm-schema = { workspace = true }
 cosmwasm-std    = { workspace = true }
 cw2             = { workspace = true }
-cw-storage-plus = { workspace = true }
-cw-utils        = { workspace = true }
-rust_decimal    = { version = "1.14.3" }
-schemars        = { workspace = true }
-serde           = { workspace = true }
-sg1             = { workspace = true }
-sg-std          = { workspace = true }
-thiserror       = { workspace = true }
-sg721-name      = "1.2.5"
+# cw-storage-plus = { workspace = true }
+# cw-utils        = { workspace = true }
+# rust_decimal    = { version = "1.14.3" }
+# schemars        = { workspace = true }
+serde = { workspace = true }
+# sg1             = { workspace = true }
+# sg-std          = { workspace = true }
+thiserror  = { workspace = true }
+sg721-name = "1.2.5"
