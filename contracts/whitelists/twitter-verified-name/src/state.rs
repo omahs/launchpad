@@ -10,6 +10,7 @@ pub struct Config {
     pub mint_price: Coin,
     pub member_limit: u32,
     pub whale_cap: Option<u32>,
+    pub name_collection: String,
 }
 
 #[cw_serde]
