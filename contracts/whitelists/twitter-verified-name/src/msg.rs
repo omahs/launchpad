@@ -73,6 +73,10 @@ pub enum QueryMsg {
         sender: String,
         msg: CosmosMsg<Empty>,
     },
+    #[returns(bool)]
+    IncludesAddress { address: String },
+    #[returns(bool)]
+    IncludesName { name: String },
 }
 
 #[cw_serde]

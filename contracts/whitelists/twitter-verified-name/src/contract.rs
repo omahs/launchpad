@@ -339,26 +339,29 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
         QueryMsg::Config {} => to_binary(&query_config(deps, env)?),
         QueryMsg::AdminList {} => to_binary(&query_admin_list(deps)?),
         QueryMsg::CanExecute { sender, .. } => to_binary(&query_can_execute(deps, &sender)?),
+        QueryMsg::IncludesAddress { address } => {
+            to_binary(&query_twitter_verified_address(deps, address)?)
+        }
+        QueryMsg::IncludesName { name } => to_binary(&query_twitter_verified_name(deps, name)?),
     }
 }
 
-// fn query_twitter_verified_address(deps: Deps, address: String) -> StdResult<bool> {
-//     let addr = deps.api.addr_validate(&address)?;
-//     let name = WHITELIST.load(deps.storage, addr)?;
-//     Ok(VerifiedNameResponse { name })
-// }
-
 fn query_twitter_verified_name(deps: Deps, name: String) -> StdResult<bool> {
-    // let addr = deps.api.addr_validate(&address)?;
-    // let name = WHITELIST.load(deps.storage, addr)?;
-    // Ok(VerifiedNameResponse { name })
     let name_collection = deps
         .api
         .addr_validate(&CONFIG.load(deps.storage)?.name_collection)?;
 
-    let name_contract = NameCollectionContract(name_collection);
+    NameCollectionContract(name_collection).is_twitter_verified(&deps.querier, &name)
+}
 
-    Ok(false)
+fn query_twitter_verified_address(deps: Deps, address: String) -> StdResult<bool> {
+    let name_collection = deps
+        .api
+        .addr_validate(&CONFIG.load(deps.storage)?.name_collection)?;
+    let name_collection = NameCollectionContract(name_collection);
+    let name = name_collection.name(&deps.querier, &address)?;
+
+    Ok(name_collection.is_twitter_verified(&deps.querier, &name)?)
 }
 
 fn query_has_started(deps: Deps, env: Env) -> StdResult<HasStartedResponse> {
