@@ -19,6 +19,7 @@ use cw_utils::{may_pay, maybe_addr, must_pay};
 use rust_decimal::prelude::ToPrimitive;
 use rust_decimal::Decimal;
 use sg1::checked_fair_burn;
+use sg721_name::NameCollectionContract;
 use sg_std::{Response, GENESIS_MINT_START_TIME, NATIVE_DENOM};
 
 // version info for migration info
@@ -341,10 +342,23 @@ pub fn query(deps: Deps, env: Env, msg: QueryMsg) -> StdResult<Binary> {
     }
 }
 
-fn query_verified_name(deps: Deps, address: String) -> StdResult<VerifiedNameResponse> {
-    let addr = deps.api.addr_validate(&address)?;
-    let name = WHITELIST.load(deps.storage, addr)?;
-    Ok(VerifiedNameResponse { name })
+// fn query_twitter_verified_address(deps: Deps, address: String) -> StdResult<bool> {
+//     let addr = deps.api.addr_validate(&address)?;
+//     let name = WHITELIST.load(deps.storage, addr)?;
+//     Ok(VerifiedNameResponse { name })
+// }
+
+fn query_twitter_verified_name(deps: Deps, name: String) -> StdResult<bool> {
+    // let addr = deps.api.addr_validate(&address)?;
+    // let name = WHITELIST.load(deps.storage, addr)?;
+    // Ok(VerifiedNameResponse { name })
+    let name_collection = deps
+        .api
+        .addr_validate(&CONFIG.load(deps.storage)?.name_collection)?;
+
+    let name_contract = NameCollectionContract(name_collection);
+
+    Ok(false)
 }
 
 fn query_has_started(deps: Deps, env: Env) -> StdResult<HasStartedResponse> {
