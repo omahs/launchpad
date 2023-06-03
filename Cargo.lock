@@ -3370,6 +3370,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "sg-wave-controller"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 0.16.0",
+ "cw2 0.16.0",
+ "schemars",
+ "serde",
+ "sg-smart-whitelist",
+ "sg-std 2.3.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "thiserror",
+]
+
+[[package]]
 name = "sg-whitelist"
 version = "2.3.0"
 dependencies = [
