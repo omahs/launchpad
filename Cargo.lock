@@ -3268,6 +3268,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "sg-open-whitelist"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 0.16.0",
+ "cw2 0.16.0",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
 name = "sg-smart-whitelist"
 version = "2.3.0"
 dependencies = [
