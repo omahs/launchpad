@@ -1,5 +1,5 @@
 [package]
-name        = "sg-open-whitelist"
+name        = "stargaze-smart-whitelist-open"
 authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
 description = "Open smart whitelist for public mints"
 version     = { workspace = true }

@@ -1,5 +1,5 @@
 [package]
-name        = "sg-twitter-verified-name-whitelist"
+name        = "stargaze-smart-whitelist-twitter-verified-name"
 authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
 description = "Twitter-verified Name whitelist"
 version     = { workspace = true }

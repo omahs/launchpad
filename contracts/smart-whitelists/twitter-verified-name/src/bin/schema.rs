@@ -1,6 +1,6 @@
 use cosmwasm_schema::write_api;
 
-use sg_twitter_verified_name_whitelist::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
+use stargaze_smart_whitelist_twitter_verified_name::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
 
 fn main() {
     write_api! {

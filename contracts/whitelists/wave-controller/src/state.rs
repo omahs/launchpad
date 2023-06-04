@@ -1,21 +1,10 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{to_binary, Addr, Coin, QuerierWrapper, QueryRequest, StdResult, WasmQuery};
 use cw_storage_plus::Map;
-
-#[cw_serde]
-pub enum WhitelistType {
-    Immutable,
-    Mutable,
-    Captcha,
-    NftOwner,
-    TwitterVerifiedName,
-    Open,
-    Custom(String),
-}
+use sg_std::CosmosMsg;
 
 #[cw_serde]
 pub struct WhitelistConfig {
-    pub whitelist_type: WhitelistType,
     pub start_time: u64,
     pub end_time: u64,
     pub mint_allowance: u32, // per address limit
@@ -34,9 +23,9 @@ pub const WHITELISTS: Map<Addr, WhitelistData> = Map::new("wls");
 pub const MINTED_LIST: Map<Addr, u64> = Map::new("ml");
 
 #[cw_serde]
-pub struct WhitelistContract(pub Addr);
+pub struct SmartWhitelistContract(pub Addr);
 
-impl WhitelistContract {
+impl SmartWhitelistContract {
     pub fn addr(&self) -> Addr {
         self.0.clone()
     }

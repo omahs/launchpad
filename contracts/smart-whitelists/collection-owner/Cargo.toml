@@ -1,5 +1,5 @@
 [package]
-name        = "sg-collection-owner-whitelist"
+name        = "stargaze-smart-whitelist-collection-owner"
 authors     = ["Shane Vitarana <s@noreply.publicawesome.com>"]
 description = "Smart whitelist for the owners of a collection"
 version     = { workspace = true }

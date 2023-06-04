@@ -1,6 +1,8 @@
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{WhitelistConfig, WhitelistContract, WhitelistData, MINTED_LIST, WHITELISTS};
+use crate::state::{
+    SmartWhitelistContract, WhitelistConfig, WhitelistData, MINTED_LIST, WHITELISTS,
+};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{ensure, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Order, StdResult};
@@ -62,8 +64,22 @@ fn update_ownership(
 }
 
 fn execute_purge(deps: DepsMut, _env: Env, info: MessageInfo) -> Result<Response, ContractError> {
-    // let owner = get_ownership(deps.storage)?;
-    // ensure!(info.sender == owner, ContractError::Unauthorized {});
+    assert_owner(deps.storage, &info.sender)?;
+
+    // iterate through each whitelist and called `purge()`
+    let whitelists = WHITELISTS.keys(deps.storage, None, None, Order::Ascending);
+    for list in whitelists {
+        let list = list?;
+        let contract_name = cw2::query_contract_info(&deps.querier, list.clone())?.contract;
+        if !contract_name.contains("smart") {
+            // TODO: this contract is in core and has to be merged in
+            // let contract = MutableWhitelistContract(list);
+            // contract.purge(&deps.querier)?;
+        }
+    }
+
+    // TODO: purge the minted list
+    // TODO: purge all whitelist data
 
     Ok(Response::new().add_attribute("action", "purge"))
 }
@@ -135,7 +151,7 @@ fn execute_process_address(
     whitelist: String,
     address: String,
 ) -> Result<Response, ContractError> {
-    let whitelist = WhitelistContract(deps.api.addr_validate(&whitelist)?);
+    let whitelist = SmartWhitelistContract(deps.api.addr_validate(&whitelist)?);
     let minting_address = deps.api.addr_validate(&address)?;
 
     ensure!(
@@ -184,7 +200,7 @@ fn query_whitelist_data(deps: Deps, contract: String) -> StdResult<WhitelistData
 
 fn query_can_mint(deps: Deps, whitelist: String, address: String, count: u32) -> StdResult<bool> {
     let whitelist_addr = deps.api.addr_validate(&whitelist)?;
-    let whitelist = WhitelistContract(whitelist_addr);
+    let whitelist = SmartWhitelistContract(whitelist_addr);
     // let config = WHITELISTS.load(deps.storage, whitelist_addr)?;
 
     // TODO: check if address not minted over max mint allowance

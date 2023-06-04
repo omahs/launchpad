@@ -3161,19 +3161,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sg-collection-owner-whitelist"
-version = "2.3.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-storage-plus 1.0.1",
- "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "cw721-base 0.17.0",
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "sg-controllers"
 version = "2.3.0"
 dependencies = [
@@ -3268,18 +3255,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "sg-open-whitelist"
-version = "2.3.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-storage-plus 1.0.1",
- "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde",
- "thiserror",
-]
-
-[[package]]
 name = "sg-smart-whitelist"
 version = "2.3.0"
 dependencies = [
@@ -3345,19 +3320,6 @@ dependencies = [
  "cw721 0.16.0",
  "schemars",
  "serde",
- "thiserror",
-]
-
-[[package]]
-name = "sg-twitter-verified-name-whitelist"
-version = "2.3.0"
-dependencies = [
- "cosmwasm-schema",
- "cosmwasm-std",
- "cw-storage-plus 1.0.1",
- "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "serde",
- "sg721-name",
  "thiserror",
 ]
 
@@ -3720,6 +3682,44 @@ checksum = "67cf02bbac7a337dc36e4f5a693db6c21e7863f45070f7064577eb4367a3212b"
 dependencies = [
  "base64ct",
  "der",
+]
+
+[[package]]
+name = "stargaze-smart-whitelist-collection-owner"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 1.0.1",
+ "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "cw721-base 0.17.0",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "stargaze-smart-whitelist-open"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 1.0.1",
+ "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "stargaze-smart-whitelist-twitter-verified-name"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 1.0.1",
+ "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "sg721-name",
+ "thiserror",
 ]
 
 [[package]]
