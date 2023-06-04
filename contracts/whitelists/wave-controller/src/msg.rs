@@ -1,7 +1,7 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
 use cw_ownable::{cw_ownable_execute, cw_ownable_query};
 
-use crate::state::WhitelistConfig;
+use crate::state::{WhitelistConfig, WhitelistData};
 
 #[cw_serde]
 pub struct InstantiateMsg {
@@ -42,6 +42,6 @@ pub enum QueryMsg {
     },
     #[returns(Vec<String>)]
     Wave {},
-    #[returns(WhitelistConfig)]
-    WhitelistConfig { contract: String },
+    #[returns(WhitelistData)]
+    WhitelistData { contract: String },
 }

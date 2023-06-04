@@ -155,33 +155,29 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
     match msg {
         QueryMsg::Ownership {} => to_binary(&get_ownership(deps.storage)?),
         QueryMsg::Wave {} => to_binary(&query_wave(deps)?),
-        QueryMsg::WhitelistConfig { contract } => {
-            let whitelist_addr = deps.api.addr_validate(&contract)?;
-            let config = WHITELISTS.load(deps.storage, whitelist_addr)?;
-            to_binary(&config)
-        }
+        QueryMsg::WhitelistData { contract } => to_binary(&query_whitelist_data(deps, contract)?),
         QueryMsg::PreMint {
             whitelist,
             address,
             count,
-        } => {
-            let whitelist_addr = deps.api.addr_validate(&whitelist)?;
-            let whitelist = WhitelistContract(whitelist_addr);
-            let is_included = whitelist.includes(&deps.querier, address)?;
-            // TODO: check if address not minted over max mint allowance
-            // TODO: check if mint count for the whitelist is not over the max mint count for that list
-            to_binary(&is_included)
-        }
+        } => to_binary(&query_can_mint(deps, whitelist, address, count)?),
     }
 }
 
-// fn query_can_mint(deps: Deps, whitelist: String, address: String, count: u32) -> StdResult<bool> {
-//     let whitelist_addr = deps.api.addr_validate(&whitelist)?;
-//     let whitelist = WhitelistContract(whitelist_addr);
-//     let is_included = whitelist.includes(&deps.querier, address)?;
+fn query_whitelist_data(deps: Deps, contract: String) -> StdResult<WhitelistData> {
+    WHITELISTS.load(deps.storage, deps.api.addr_validate(&contract)?)
+}
 
-//     let config = WHITELISTS.load(deps.storage, whitelist_addr)?;
-// }
+fn query_can_mint(deps: Deps, whitelist: String, address: String, count: u32) -> StdResult<bool> {
+    let whitelist_addr = deps.api.addr_validate(&whitelist)?;
+    let whitelist = WhitelistContract(whitelist_addr);
+    // let config = WHITELISTS.load(deps.storage, whitelist_addr)?;
+
+    // TODO: check if address not minted over max mint allowance
+    // TODO: check if mint count for the whitelist is not over the max mint count for that list
+
+    whitelist.includes(&deps.querier, address)
+}
 
 fn query_wave(deps: Deps) -> StdResult<Vec<String>> {
     let wave = WHITELISTS
