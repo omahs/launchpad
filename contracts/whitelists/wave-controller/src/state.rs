@@ -16,13 +16,20 @@ pub enum WhitelistType {
 #[cw_serde]
 pub struct WhitelistConfig {
     pub whitelist_type: WhitelistType,
-    pub mint_allowance: u32, // per address limit
-    pub mint_price: Coin,
     pub start_time: u64,
     pub end_time: u64,
+    pub mint_allowance: u32, // per address limit
+    pub mint_price: Coin,
+    pub max_mint_count: u64,
 }
 
-pub const WHITELISTS: Map<Addr, WhitelistConfig> = Map::new("wls");
+#[cw_serde]
+pub struct WhitelistData {
+    pub config: WhitelistConfig,
+    pub mint_count: u64,
+}
+
+pub const WHITELISTS: Map<Addr, WhitelistData> = Map::new("wls");
 
 pub const MINTED_LIST: Map<Addr, u64> = Map::new("ml");
 

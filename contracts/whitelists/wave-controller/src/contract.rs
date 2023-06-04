@@ -1,12 +1,11 @@
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{WhitelistConfig, WhitelistContract, MINTED_LIST, WHITELISTS};
+use crate::state::{WhitelistConfig, WhitelistContract, WhitelistData, MINTED_LIST, WHITELISTS};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{ensure, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Order, StdResult};
 use cw2::set_contract_version;
 use cw_ownable::get_ownership;
-// use cw_ownable::update_ownership;
 use sg_std::Response;
 
 const CONTRACT_NAME: &str = "crates.io:sg-wave-controller";
@@ -71,8 +70,11 @@ fn execute_add_whitelist(
     let whitelist_addr = deps.api.addr_validate(&contract)?;
 
     // config.validate()?;
-
-    WHITELISTS.save(deps.storage, whitelist_addr, &config)?;
+    let data = WhitelistData {
+        config,
+        mint_count: 0,
+    };
+    WHITELISTS.save(deps.storage, whitelist_addr, &data)?;
 
     Ok(Response::new()
         .add_attribute("action", "add_whitelist")
@@ -127,10 +129,21 @@ fn execute_process_address(
         ContractError::Unauthorized {}
     );
 
-    let mint_count = MINTED_LIST
+    // update mint count for the address
+    let address_mint_count = MINTED_LIST
         .may_load(deps.storage, minting_address.clone())?
         .unwrap_or(0);
-    MINTED_LIST.save(deps.storage, minting_address, &(mint_count + 1))?;
+    MINTED_LIST.save(deps.storage, minting_address, &(address_mint_count + 1))?;
+
+    // update mint count for the whitelist
+    let whitelist_mint_count = WHITELISTS.load(deps.storage, whitelist.addr())?.mint_count;
+    WHITELISTS.update(deps.storage, whitelist.addr(), |data| match data {
+        Some(mut whitelist_data) => {
+            whitelist_data.mint_count = whitelist_mint_count + 1;
+            Ok(whitelist_data)
+        }
+        None => Err(ContractError::Unauthorized {}),
+    })?;
 
     Ok(Response::new()
         .add_attribute("action", "process_address")
@@ -155,11 +168,20 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
             let whitelist_addr = deps.api.addr_validate(&whitelist)?;
             let whitelist = WhitelistContract(whitelist_addr);
             let is_included = whitelist.includes(&deps.querier, address)?;
-            // TODO: check if not minted over max mint allowance
+            // TODO: check if address not minted over max mint allowance
+            // TODO: check if mint count for the whitelist is not over the max mint count for that list
             to_binary(&is_included)
         }
     }
 }
+
+// fn query_can_mint(deps: Deps, whitelist: String, address: String, count: u32) -> StdResult<bool> {
+//     let whitelist_addr = deps.api.addr_validate(&whitelist)?;
+//     let whitelist = WhitelistContract(whitelist_addr);
+//     let is_included = whitelist.includes(&deps.querier, address)?;
+
+//     let config = WHITELISTS.load(deps.storage, whitelist_addr)?;
+// }
 
 fn query_wave(deps: Deps) -> StdResult<Vec<String>> {
     let wave = WHITELISTS
