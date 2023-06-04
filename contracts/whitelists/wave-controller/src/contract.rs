@@ -5,7 +5,7 @@ use crate::state::{WhitelistConfig, WhitelistContract, WhitelistData, MINTED_LIS
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{ensure, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Order, StdResult};
 use cw2::set_contract_version;
-use cw_ownable::get_ownership;
+use cw_ownable::{assert_owner, get_ownership};
 use sg_std::Response;
 
 const CONTRACT_NAME: &str = "crates.io:sg-wave-controller";
@@ -46,6 +46,7 @@ pub fn execute(
         ExecuteMsg::PostMint { whitelist, address } => {
             execute_process_address(deps, env, info, whitelist, address)
         }
+        ExecuteMsg::Purge {} => execute_purge(deps, env, info),
     }
 }
 
@@ -60,6 +61,13 @@ fn update_ownership(
     Ok(Response::new().add_attributes(ownership.into_attributes()))
 }
 
+fn execute_purge(deps: DepsMut, _env: Env, info: MessageInfo) -> Result<Response, ContractError> {
+    // let owner = get_ownership(deps.storage)?;
+    // ensure!(info.sender == owner, ContractError::Unauthorized {});
+
+    Ok(Response::new().add_attribute("action", "purge"))
+}
+
 fn execute_add_whitelist(
     deps: DepsMut,
     _env: Env,
@@ -67,6 +75,8 @@ fn execute_add_whitelist(
     contract: String,
     config: WhitelistConfig,
 ) -> Result<Response, ContractError> {
+    assert_owner(deps.storage, &info.sender)?;
+
     let whitelist_addr = deps.api.addr_validate(&contract)?;
 
     // config.validate()?;
@@ -87,6 +97,8 @@ fn execute_remove_whitelist(
     info: MessageInfo,
     contract: String,
 ) -> Result<Response, ContractError> {
+    assert_owner(deps.storage, &info.sender)?;
+
     let whitelist_addr = deps.api.addr_validate(&contract)?;
 
     WHITELISTS.remove(deps.storage, whitelist_addr);
@@ -103,6 +115,8 @@ fn execute_update_whitelist(
     contract: String,
     _config: WhitelistConfig,
 ) -> Result<Response, ContractError> {
+    assert_owner(deps.storage, &info.sender)?;
+
     let whitelist_addr = deps.api.addr_validate(&contract)?;
 
     // config.validate()?;

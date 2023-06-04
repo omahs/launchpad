@@ -27,6 +27,7 @@ pub enum ExecuteMsg {
         whitelist: String,
         address: String,
     },
+    Purge {},
 }
 
 #[cw_ownable_query]
