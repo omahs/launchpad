@@ -1,8 +1,6 @@
 use crate::error::ContractError;
 use crate::msg::{ExecuteMsg, InstantiateMsg, QueryMsg};
-use crate::state::{
-    SmartWhitelistContract, WhitelistConfig, WhitelistData, MINTED_LIST, WHITELISTS,
-};
+use crate::state::{WhitelistConfig, WhitelistData, MINTED_LIST, WHITELISTS};
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
 use cosmwasm_std::{
@@ -10,6 +8,7 @@ use cosmwasm_std::{
 };
 use cw2::set_contract_version;
 use cw_ownable::{assert_owner, get_ownership};
+use sg_smart_whitelist::SmartWhitelistContract;
 use sg_std::Response;
 
 const CONTRACT_NAME: &str = "crates.io:sg-wave-controller";

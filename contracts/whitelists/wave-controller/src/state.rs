@@ -1,5 +1,5 @@
 use cosmwasm_schema::cw_serde;
-use cosmwasm_std::{to_binary, Addr, Coin, QuerierWrapper, QueryRequest, StdResult, WasmQuery};
+use cosmwasm_std::{Addr, Coin};
 use cw_storage_plus::Map;
 
 #[cw_serde]
@@ -20,22 +20,3 @@ pub struct WhitelistData {
 pub const WHITELISTS: Map<Addr, WhitelistData> = Map::new("wls");
 
 pub const MINTED_LIST: Map<Addr, u64> = Map::new("ml");
-
-#[cw_serde]
-pub struct SmartWhitelistContract(pub Addr);
-
-impl SmartWhitelistContract {
-    pub fn addr(&self) -> Addr {
-        self.0.clone()
-    }
-
-    pub fn includes(&self, querier: &QuerierWrapper, address: String) -> StdResult<bool> {
-        let includes: bool = querier.query(&QueryRequest::Wasm(WasmQuery::Smart {
-            contract_addr: self.addr().into(),
-            msg: to_binary(&sg_smart_whitelist::QueryMsg::IncludesAddress { address })?,
-        }))?;
-        Ok(includes)
-    }
-
-    // TODO: add the other helpers
-}

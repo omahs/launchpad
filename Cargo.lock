@@ -3259,6 +3259,7 @@ name = "sg-smart-whitelist"
 version = "2.3.0"
 dependencies = [
  "cosmwasm-schema",
+ "cosmwasm-std",
  "serde",
 ]
 
@@ -3694,6 +3695,19 @@ dependencies = [
  "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "cw721-base 0.17.0",
  "serde",
+ "thiserror",
+]
+
+[[package]]
+name = "stargaze-smart-whitelist-composite"
+version = "2.3.0"
+dependencies = [
+ "cosmwasm-schema",
+ "cosmwasm-std",
+ "cw-storage-plus 1.0.1",
+ "cw2 1.0.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "serde",
+ "sg-smart-whitelist",
  "thiserror",
 ]
 

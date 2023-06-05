@@ -9,5 +9,6 @@ repository  = { workspace = true }
 license     = { workspace = true }
 
 [dependencies]
+cosmwasm-std    = { workspace = true }
 cosmwasm-schema = { workspace = true }
 serde           = { workspace = true }
