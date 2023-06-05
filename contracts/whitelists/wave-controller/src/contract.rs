@@ -5,7 +5,9 @@ use crate::state::{
 };
 #[cfg(not(feature = "library"))]
 use cosmwasm_std::entry_point;
-use cosmwasm_std::{ensure, to_binary, Binary, Deps, DepsMut, Env, MessageInfo, Order, StdResult};
+use cosmwasm_std::{
+    ensure, to_binary, Binary, Coin, Deps, DepsMut, Env, MessageInfo, Order, StdResult,
+};
 use cw2::set_contract_version;
 use cw_ownable::{assert_owner, get_ownership};
 use sg_std::Response;
@@ -133,7 +135,7 @@ fn execute_update_whitelist(
 ) -> Result<Response, ContractError> {
     assert_owner(deps.storage, &info.sender)?;
 
-    let whitelist_addr = deps.api.addr_validate(&contract)?;
+    // let whitelist_addr = deps.api.addr_validate(&contract)?;
 
     // config.validate()?;
 
@@ -190,7 +192,7 @@ pub fn query(deps: Deps, _env: Env, msg: QueryMsg) -> StdResult<Binary> {
             whitelist,
             address,
             count,
-        } => to_binary(&query_can_mint(deps, whitelist, address, count)?),
+        } => to_binary(&query_pre_mint(deps, whitelist, address, count)?),
     }
 }
 
@@ -198,15 +200,18 @@ fn query_whitelist_data(deps: Deps, contract: String) -> StdResult<WhitelistData
     WHITELISTS.load(deps.storage, deps.api.addr_validate(&contract)?)
 }
 
-fn query_can_mint(deps: Deps, whitelist: String, address: String, count: u32) -> StdResult<bool> {
+fn query_pre_mint(deps: Deps, whitelist: String, address: String, count: u32) -> StdResult<Coin> {
     let whitelist_addr = deps.api.addr_validate(&whitelist)?;
     let whitelist = SmartWhitelistContract(whitelist_addr);
-    // let config = WHITELISTS.load(deps.storage, whitelist_addr)?;
+    whitelist.includes(&deps.querier, address)?;
 
     // TODO: check if address not minted over max mint allowance
     // TODO: check if mint count for the whitelist is not over the max mint count for that list
 
-    whitelist.includes(&deps.querier, address)
+    Ok(WHITELISTS
+        .load(deps.storage, whitelist.addr())?
+        .config
+        .mint_price)
 }
 
 fn query_wave(deps: Deps) -> StdResult<Vec<String>> {

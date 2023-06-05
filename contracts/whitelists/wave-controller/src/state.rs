@@ -1,7 +1,6 @@
 use cosmwasm_schema::cw_serde;
 use cosmwasm_std::{to_binary, Addr, Coin, QuerierWrapper, QueryRequest, StdResult, WasmQuery};
 use cw_storage_plus::Map;
-use sg_std::CosmosMsg;
 
 #[cw_serde]
 pub struct WhitelistConfig {

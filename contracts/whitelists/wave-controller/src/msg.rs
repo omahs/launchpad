@@ -1,4 +1,5 @@
 use cosmwasm_schema::{cw_serde, QueryResponses};
+use cosmwasm_std::Coin;
 use cw_ownable::{cw_ownable_execute, cw_ownable_query};
 
 use crate::state::{WhitelistConfig, WhitelistData};
@@ -35,7 +36,7 @@ pub enum ExecuteMsg {
 #[derive(QueryResponses)]
 pub enum QueryMsg {
     /// Called before minting to check if the address is whitelisted
-    #[returns(bool)]
+    #[returns(Coin)]
     PreMint {
         whitelist: String,
         address: String,
