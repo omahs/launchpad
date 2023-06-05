@@ -53,6 +53,7 @@ sg721               = { workspace = true }
 sg-whitelist        = { workspace = true, features = ["library"] }
 vending-factory     = { workspace = true, features = ["library"] }
 vending-minter      = { workspace = true, features = ["library"] }
+vending-minter-wl-flex = { workspace = true, features = ["library"] }
 base-factory        = { workspace = true }
 base-minter         = { workspace = true }
 sg721-nt            = { workspace = true }

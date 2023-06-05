@@ -3715,6 +3715,7 @@ dependencies = [
  "url",
  "vending-factory",
  "vending-minter",
+ "vending-minter-wl-flex",
  "whitelist-immutable",
 ]
 

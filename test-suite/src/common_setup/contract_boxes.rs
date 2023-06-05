@@ -64,6 +64,16 @@ pub fn contract_vending_minter() -> Box<dyn Contract<StargazeMsgWrapper>> {
     Box::new(contract)
 }
 
+pub fn contract_vending_minter_wl_flex() -> Box<dyn Contract<StargazeMsgWrapper>> {
+    let contract = ContractWrapper::new(
+        vending_minter_wl_flex::contract::execute,
+        vending_minter_wl_flex::contract::instantiate,
+        vending_minter_wl_flex::contract::query,
+    )
+    .with_reply(vending_minter::contract::reply);
+    Box::new(contract)
+}
+
 pub fn contract_sg721_base() -> Box<dyn Contract<StargazeMsgWrapper>> {
     let contract = ContractWrapper::new(
         sg721_base::entry::execute,
