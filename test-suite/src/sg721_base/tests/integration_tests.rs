@@ -293,7 +293,7 @@ mod tests {
             params.info.external_link = None;
             let custom_create_minter_msg =
                 mock_create_minter_init_msg(params.clone(), mock_init_extension(None, None));
-            let (mut app, contract) = custom_proper_instantiate(custom_create_minter_msg.clone());
+            let (mut app, contract) = custom_proper_instantiate(custom_create_minter_msg);
 
             // default trading start time is start time + default trading start time offset
             let res: CollectionInfoResponse = app
