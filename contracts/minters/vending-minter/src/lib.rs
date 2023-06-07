@@ -6,4 +6,5 @@ pub mod state;
 pub use crate::error::ContractError;
 
 pub mod helpers;
+pub mod tests;
 pub mod validation;
