@@ -1,4 +1,4 @@
-use cosmwasm_std::{coin, coins, Addr, BankMsg, Coin, Decimal, Event, MessageInfo, Uint128};
+use cosmwasm_std::{coins, Addr, BankMsg, Coin, Decimal, Event, MessageInfo, Uint128};
 use cw_utils::{may_pay, PaymentError};
 use sg_std::{
     create_fund_community_pool_msg, create_fund_fairburn_pool_msg, Response, SubMsg, NATIVE_DENOM,
@@ -32,29 +32,11 @@ pub fn checked_fair_burn(
 /// 7/29/23 temporary fix until we switch to using fairburn contract
 pub fn ibc_denom_fair_burn(
     fee: Coin,
-    developer: Option<Addr>,
+    _developer: Option<Addr>,
     res: &mut Response,
 ) -> Result<(), FeeError> {
-    match &developer {
-        Some(developer) => {
-            // Calculate the fees. 50% to dev, 50% to community pool
-            let dev_fee = (fee.amount.mul_ceil(Decimal::percent(FEE_BURN_PERCENT))).u128();
-            let dev_coin = coins(dev_fee, fee.denom.to_string());
-            let comm_fee = coin(fee.amount.u128() - dev_fee, fee.denom);
-
-            res.messages.push(SubMsg::new(BankMsg::Send {
-                to_address: developer.to_string(),
-                amount: dev_coin,
-            }));
-            res.messages
-                .push(SubMsg::new(create_fund_community_pool_msg(vec![comm_fee])));
-        }
-        None => {
-            // No dev, send all to community pool.
-            res.messages
-                .push(SubMsg::new(create_fund_community_pool_msg(vec![fee])));
-        }
-    }
+    res.messages
+        .push(SubMsg::new(create_fund_community_pool_msg(vec![fee])));
     Ok(())
 }
 
