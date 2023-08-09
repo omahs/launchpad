@@ -5,7 +5,7 @@
 KEY=$(starsd keys show $ADMIN | jq -r .name)
 FACTORY_CODE_ID=2792
 MINTER_CODE_ID=2783
-DEV_ADDRESS="stars1abcd4kdla12mh86psg4y4h6hh05g2hmqoap350";
+DEV_ADDRESS="stars10w5eulj60qp3cfqa0hkmke78qdy2feq6x9xdmd";
 
 MSG=$(cat <<EOF
 {

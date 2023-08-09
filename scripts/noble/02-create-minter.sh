@@ -1,5 +1,5 @@
 KEY=$(starsd keys show $ADMIN | jq -r .name)
-FACTORY=stars1ky6q3xrz6wr38csdaa7c09aeglptf7pawvsrdqyl96zhpyetwerqmsxj2u
+FACTORY=stars1wdnvdccel6vn5cjtukzh5ha666qllf3afp0vf89xvnuj4qrslvds090jax
 SG721_CODE_ID=2784
 
 # add a few minutes buffer to start time
