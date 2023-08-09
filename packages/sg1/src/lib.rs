@@ -29,14 +29,33 @@ pub fn checked_fair_burn(
 }
 
 /// IBC assets go to community pool and dev
+/// 8/8/23 for Noble branch send all to dev if dev specified
 /// 7/29/23 temporary fix until we switch to using fairburn contract
 pub fn ibc_denom_fair_burn(
     fee: Coin,
-    _developer: Option<Addr>,
+    developer: Option<Addr>,
     res: &mut Response,
 ) -> Result<(), FeeError> {
-    res.messages
-        .push(SubMsg::new(create_fund_community_pool_msg(vec![fee])));
+    let mut event = Event::new("ibc-fair-burn");
+    match developer {
+        Some(dev) => {
+            event = event.add_attribute("dev_addr", dev.to_string());
+            event = event.add_attribute("dev_denom", fee.denom.to_string());
+            event = event.add_attribute("dev_amount", fee.amount.u128().to_string());
+            res.messages.push(SubMsg::new(BankMsg::Send {
+                to_address: dev.to_string(),
+                amount: vec![fee],
+            }))
+        }
+        None => {
+            event = event.add_attribute("com_pool_denom", fee.denom.to_string());
+            event = event.add_attribute("com_pool_amount", fee.amount.u128().to_string());
+            res.messages
+                .push(SubMsg::new(create_fund_community_pool_msg(vec![fee])));
+        }
+    };
+
+    res.events.push(event);
     Ok(())
 }
 
