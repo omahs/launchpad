@@ -158,6 +158,10 @@ pub fn execute_mint_sender(
     }
     checked_fair_burn(&info, network_fee.u128(), None, &mut res)?;
 
+    // let premint_msgs = prepare_premint...(sender, collection...)...
+
+    // let postmint_msgs = prepare_postmint..()
+
     // Create mint msgs
     let mint_msg = Sg721ExecuteMsg::<Extension, Empty>::Mint {
         token_id: increment_token_index(deps.storage)?.to_string(),
@@ -170,7 +174,10 @@ pub fn execute_mint_sender(
         msg: to_binary(&mint_msg)?,
         funds: vec![],
     });
+
+    // res = res.add_messages(premint_msgs);
     res = res.add_message(msg);
+    // res = res.add_messages(postmint_msgs);
 
     Ok(res
         .add_attribute("action", "mint")
