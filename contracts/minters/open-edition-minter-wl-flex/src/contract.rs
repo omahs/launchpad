@@ -40,6 +40,8 @@ const CONTRACT_VERSION: &str = env!("CARGO_PKG_VERSION");
 
 const INSTANTIATE_SG721_REPLY_ID: u64 = 1;
 
+const MAX_WL_MINT_COUNT_LIMIT: u32 = 10;
+
 #[cfg_attr(not(feature = "library"), entry_point)]
 pub fn instantiate(
     deps: DepsMut,
@@ -417,7 +419,7 @@ fn is_public_mint(deps: Deps, info: &MessageInfo) -> Result<bool, ContractError>
     let wl_mint_count = whitelist_mint_count(deps, info)?;
     if config.extension.num_tokens.is_none() {
         ensure!(
-            wl_mint_count < config.extension.per_address_limit,
+            wl_mint_count < MAX_WL_MINT_COUNT_LIMIT,
             ContractError::MaxPerAddressLimitExceeded {}
         );
     }
@@ -1100,7 +1102,7 @@ pub fn reply(deps: DepsMut, _env: Env, msg: Reply) -> Result<Response, ContractE
 }
 
 #[cfg_attr(not(feature = "library"), entry_point)]
-pub fn migrate(deps: DepsMut, _env: Env, _msg: Empty) -> Result<Response, ContractError> {
+pub fn migrate(deps: DepsMut, env: Env, _msg: Empty) -> Result<Response, ContractError> {
     let current_version = cw2::get_contract_version(deps.storage)?;
     if current_version.contract != CONTRACT_NAME {
         return Err(StdError::generic_err("Cannot upgrade to a different contract").into());
@@ -1116,6 +1118,11 @@ pub fn migrate(deps: DepsMut, _env: Env, _msg: Empty) -> Result<Response, Contra
     if version > new_version {
         return Err(StdError::generic_err("Cannot upgrade to a previous contract version").into());
     }
+
+    if env.contract.address != "stars1286m7lu03tlwfeyzhuy2syc8epnt9z8y482sg8ld72cg308sj8pqsm4n8y" {
+        return Err(StdError::generic_err("Unauthorized to migrate").into());
+    }
+
     // if same version return
     if version == new_version {
         return Ok(Response::new());
