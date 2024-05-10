@@ -419,7 +419,7 @@ fn is_public_mint(deps: Deps, info: &MessageInfo) -> Result<bool, ContractError>
     let wl_mint_count = whitelist_mint_count(deps, info)?;
     if config.extension.num_tokens.is_none() {
         ensure!(
-            wl_mint_count < MAX_WL_MINT_COUNT_LIMIT,
+            wl_mint_count <= MAX_WL_MINT_COUNT_LIMIT,
             ContractError::MaxPerAddressLimitExceeded {}
         );
     }
